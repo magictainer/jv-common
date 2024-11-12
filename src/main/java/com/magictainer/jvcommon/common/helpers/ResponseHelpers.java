@@ -12,10 +12,15 @@ import org.springframework.util.ObjectUtils;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Component
 public class ResponseHelpers {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private static ResponseHelpers _instance;
+
+    public static ResponseHelpers getInstance() {
+        if (_instance == null) _instance = new ResponseHelpers();
+        return _instance;
+    }
 
     public String responseData(Object data, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
         response.setContentType("application/json;charset=UTF-8");

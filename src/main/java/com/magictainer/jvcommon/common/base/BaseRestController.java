@@ -24,13 +24,10 @@ import java.util.Date;
 @RestControllerAdvice
 public class BaseRestController extends ResponseEntityExceptionHandler {
 
-    @Autowired
-    private ResponseHelpers responseHelpers;
-
     protected String responseData(Object data, HttpServletRequest request, HttpServletResponse response) {
         log.info("Response (200) Data => {}", JVUtils.toJsonString(data));
         try {
-            return responseHelpers.responseData(data, request, response);
+            return ResponseHelpers.getInstance().responseData(data, request, response);
         } catch (JsonProcessingException e) {
             logger.error(e.getMessage(), e);
             throw new RestException(e.getMessage());
@@ -40,7 +37,7 @@ public class BaseRestController extends ResponseEntityExceptionHandler {
     protected String responseSuccess(String message, HttpServletRequest request, HttpServletResponse response) {
         log.info("Response (200) Message Key => {}", message);
         try {
-            return responseHelpers.responseSuccess(message, request, response);
+            return ResponseHelpers.getInstance().responseSuccess(message, request, response);
         } catch (JsonProcessingException e) {
             logger.error(e.getMessage(), e);
             throw new RestException(e.getMessage());
