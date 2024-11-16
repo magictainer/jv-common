@@ -12,6 +12,7 @@ public class ResponseConstants {
         UNAUTHORIZED(401, "unauthorized"),
         FORBIDDEN(403, "no_permission_access_is_denied"),
         NOT_FOUND(404, "not_found"),
+        RESOURCE_NOT_FOUND(404, "resource_not_found"),
         DATA_NOT_FOUND(404, "data_not_found"),
         GENERAL_SERVER_ERROR(500, "general_server_error"),
         INTERNAL_SERVER_ERROR(500, "internal_server_error"),
@@ -32,6 +33,7 @@ public class ResponseConstants {
 
         SYSTEM_DATA_FOUND("Data found."),
         SYSTEM_DATA_NOT_FOUND("Data not found."),
+        SYSTEM_RESOURCE_NOT_FOUND("Resource not found."),
         SYSTEM_INTERNAL_SERVER_ERROR("Internal server error."),
         SYSTEM_INVALID_REQUEST("Invalid request."),
         SYSTEM_INVALID_REQUEST_HEADER("Invalid request header."),
