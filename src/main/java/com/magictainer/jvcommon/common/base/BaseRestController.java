@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -88,6 +89,20 @@ public class BaseRestController extends ResponseEntityExceptionHandler {
     }
 
     @Override
+    protected ResponseEntity<Object> handleNoResourceFoundException(NoResourceFoundException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        logger.error("Catch handleNoResourceFoundException: " + ex.getMessage());
+        ResponseModel responseModel = new ResponseModel();
+        responseModel.setDatetime(LocalDateTime.now().toString());
+        responseModel.setTimestamp(new Date().getTime());
+        responseModel.setStatus(ResponseConstants.ResponseStatus.RESOURCE_NOT_FOUND.getMessage());
+        responseModel.setCode(HttpStatus.NOT_FOUND.value());
+        responseModel.setMessage(ResponseConstants.ResponseMessage.SYSTEM_RESOURCE_NOT_FOUND.getMessage());
+        responseModel.setTrace(ex.getMessage());
+        responseModel.setPath(((ServletWebRequest) request).getRequest().getRequestURI());
+        return new ResponseEntity<>(responseModel, HttpStatus.NOT_FOUND);
+    }
+
+    @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         logger.error("Catch handleMethodArgumentNotValid: " + ex.getMessage());
         ResponseModel responseModel = new ResponseModel();
@@ -110,16 +125,16 @@ public class BaseRestController extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleNoResourceFoundException(NoResourceFoundException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        logger.error("Catch handleNoResourceFoundException: " + ex.getMessage());
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        logger.error("Catch handleHttpMessageNotReadable: " + ex.getMessage());
         ResponseModel responseModel = new ResponseModel();
         responseModel.setDatetime(LocalDateTime.now().toString());
         responseModel.setTimestamp(new Date().getTime());
-        responseModel.setStatus(ResponseConstants.ResponseStatus.RESOURCE_NOT_FOUND.getMessage());
-        responseModel.setCode(HttpStatus.NOT_FOUND.value());
-        responseModel.setMessage(ResponseConstants.ResponseMessage.SYSTEM_RESOURCE_NOT_FOUND.getMessage());
+        responseModel.setStatus(ResponseConstants.ResponseStatus.BAD_REQUEST.getMessage());
+        responseModel.setCode(HttpStatus.BAD_REQUEST.value());
+        responseModel.setMessage(ResponseConstants.ResponseMessage.SYSTEM_BAD_REQUEST.getMessage());
         responseModel.setTrace(ex.getMessage());
         responseModel.setPath(((ServletWebRequest) request).getRequest().getRequestURI());
-        return new ResponseEntity<>(responseModel, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(responseModel, HttpStatus.BAD_REQUEST);
     }
 }
