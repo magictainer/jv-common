@@ -33,7 +33,7 @@ import java.util.List;
 @RestControllerAdvice
 public class BaseRestController extends ResponseEntityExceptionHandler {
 
-    protected String responseModel(Object data, HttpServletRequest request, HttpServletResponse response) {
+    protected String responseData(Object data, HttpServletRequest request, HttpServletResponse response) {
         log.info("Response (200) Data: {}", JVUtils.toJsonString(data));
         try {
             return ResponseHelpers.getInstance().responseData(data, request, response);
